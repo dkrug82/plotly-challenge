@@ -17,12 +17,13 @@ d3.json("../samples.json", function(data) {
 });*/
 
 
-function init(){
+
+function buildPlot(){
     d3.json("./samples.json").then(function(data) {
-        console.log(data);
+        //console.log(data);
     //parsed data to retrieve samples data
     var samples = Object.values(data.samples);
-        console.log(samples);
+        //console.log(samples);
     //used .map to set variables for the information needed to chart
     var otuIDs = samples.map(row => row.otu_ids);
     var sampleValues = samples.map(row => row.sample_values);
@@ -34,12 +35,12 @@ function init(){
     var slicedOtuIds = otuIDs[0].slice(0, 10);
     var slicedSampleValues = sampleValues[0].slice(0, 10);
     var slicedOtuLabels = otuLabels[0].slice(0, 10);
-        console.log(slicedOtuIds);
-        console.log(slicedSampleValues);
-        console.log(slicedOtuLabels);
+        //console.log(slicedOtuIds);
+        //console.log(slicedSampleValues);
+        //console.log(slicedOtuLabels);
 
     var otuIdsString = slicedOtuIds.map(item => `OTU ${item}`);
-    console.log(otuIdsString);
+    //console.log(otuIdsString);
     
     var data1 = [{
         x: slicedSampleValues.reverse(),
@@ -79,10 +80,28 @@ function init(){
     Plotly.newPlot('bubble', data2, layout2);
 
       });
+      
 }
+buildPlot();
 
 
 
 
-init();
+ 
+function buildDemographics(){
+    d3.json("./samples.json").then(function(data) {
+        console.log(data);
+    var metaData = Object.values(data.metadata);
+        console.log(metaData);
+    
+    var info = d3.select("#sample-metadata");
+    info.html("");
+    Object.entries(metaData[0]).forEach(([key, value]) => {
+        info.append('h6').text(`${key} : ${value}`);
+        });
+    });
+}
+buildDemographics()
+
+
 

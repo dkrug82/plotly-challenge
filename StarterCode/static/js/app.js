@@ -41,24 +41,43 @@ function init(){
     var otuIdsString = slicedOtuIds.map(item => `OTU ${item}`);
     console.log(otuIdsString);
     
-    var trace1 = {
+    var data1 = [{
         x: slicedSampleValues.reverse(),
         y: otuIdsString.reverse(),
         text:slicedOtuLabels.reverse(),
         name: "Top 10 Bacteria Cultures Found",
         type: "bar",
         orientation: 'h'
-    };
+    }];
 
-    var data = [trace1];
+    var data2 = [{
+        x: otuIDs[0],
+        y: sampleValues[0],
+        mode: 'markers',
+        marker: {
+            size: sampleValues[0],
+           color:otuIDs[0]  
+        },
+        text:otuLabels[0]
+    }];
 
-    var layout = {
+    //var data1 = [trace1];
+
+    var layout1 = {
         title: {
             text:"Top 10 Bacteria Cultures Found"
         }
     };
 
-    Plotly.newPlot('bar', data, layout);
+    var layout2 ={
+        title:{
+            text: "Bacteria Cultures per Sample"
+        }
+    }
+
+    Plotly.newPlot('bar', data1, layout1);
+    Plotly.newPlot('bubble', data2, layout2);
+
       });
 }
 

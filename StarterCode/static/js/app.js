@@ -90,9 +90,9 @@ buildPlot();
  
 function buildDemographics(){
     d3.json("./samples.json").then(function(data) {
-        console.log(data);
+        //console.log(data);
     var metaData = Object.values(data.metadata);
-        console.log(metaData);
+        //console.log(metaData);
     
     var info = d3.select("#sample-metadata");
     info.html("");
@@ -103,5 +103,20 @@ function buildDemographics(){
 }
 buildDemographics()
 
-
-
+function init(){
+    d3.json("./samples.json").then(function(data) {
+        var names = Object.values(data.names);
+        console.log(names)
+        d3.select("select").selectAll("option")
+        .data(names)
+        .enter()
+        .append("option")
+        .text(function(d) {
+            return d;
+        })
+        .attr("value", function(d){
+            return d;
+        });
+    });
+}
+init()

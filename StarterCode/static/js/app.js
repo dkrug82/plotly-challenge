@@ -1,7 +1,7 @@
 
 
 function init(){
-    d3.json("./samples.json").then(function(data) {
+    d3.json("StarterCode/samples.json").then(function(data) {
         var names = Object.values(data.names);
        // console.log(names)
         d3.select("select").selectAll("option")
@@ -23,7 +23,7 @@ function init(){
 init()
 
 function buildPlot(id){
-    d3.json("./samples.json").then(function(data) {
+    d3.json("StarterCode/samples.json").then(function(data) {
         //console.log(data);
     //parsed data to retrieve samples data
     var samples = Object.values(data.samples);
@@ -91,7 +91,7 @@ function buildPlot(id){
 
 
 function buildGage(id){
-    d3.json("./samples.json").then(function(data){
+    d3.json("StarterCode/samples.json").then(function(data){
       var metaData = Object.values(data.metadata);
     var result = metaData.filter(row => row.id == id);
     var resultData = result[0];
@@ -137,7 +137,7 @@ function buildGage(id){
 
 
 function buildDemographics(id){
-    d3.json("./samples.json").then(function(data) {
+    d3.json("StarterCode/samples.json").then(function(data) {
         //console.log(data);
     var metaData = Object.values(data.metadata);
     var result = metaData.filter(row => row.id == id);

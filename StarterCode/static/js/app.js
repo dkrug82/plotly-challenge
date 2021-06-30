@@ -1,16 +1,20 @@
 
-
+//function to intialize the data on the page
 function init(){
     d3.json("StarterCode/samples.json").then(function(data) {
+        //obtained values from json file and found the names of each sample
         var names = Object.values(data.names);
-       // console.log(names)
+       //used d3 to select the proper placment for the sample names
         d3.select("select").selectAll("option")
+        //bound the names data
         .data(names)
         .enter()
         .append("option")
+        //retuned the text for each sample name
         .text(function(d) {
             return d;
         })
+        //added value attribute to the option tag with containing the name of each sample
         .attr("value", function(d){
             return d;
         });
@@ -24,31 +28,28 @@ init()
 
 function buildPlot(id){
     d3.json("StarterCode/samples.json").then(function(data) {
-        //console.log(data);
-    //parsed data to retrieve samples data
+        
+    //obtained values from json data file for samples and filtered by 
+    //user inputted sample id
     var samples = Object.values(data.samples);
     var result = samples.filter(row => row.id == id);
     var resultData = result[0];
-        //console.log(samples);
-    //used .map to set variables for the information needed to chart
-    var otuIDs = resultData.otu_ids//.map(row => row.otu_ids);
-    var sampleValues = resultData.sample_values//.map(row => row.sample_values);
-    var otuLabels = resultData.otu_labels//.map(row => row.otu_labels); 
-        //console.log(otuIDs)
-        //console.log(sampleValues);
-        //console.log(sampleValues);
+        
+    //created variables for the information needed to chart
+    var otuIDs = resultData.otu_ids
+    var sampleValues = resultData.sample_values
+    var otuLabels = resultData.otu_labels 
+        
     //sliced each above variable to give the top 10
     var slicedOtuIds = otuIDs.slice(0, 10);
     var slicedSampleValues = sampleValues.slice(0, 10);
     var slicedOtuLabels = otuLabels.slice(0, 10);
-        //console.log(slicedOtuIds);
-        //console.log(slicedSampleValues);
-        //console.log(slicedOtuLabels);
-
+        
+    //variable used to create lables for bar chart
     var otuIdsString = slicedOtuIds.map(item => `OTU ${item}`);
-    //console.log(otuIdsString);
     
-    var data1 = [{
+    //data for bar chart
+    var barData = [{
         x: slicedSampleValues.reverse(),
         y: otuIdsString.reverse(),
         text:slicedOtuLabels.reverse(),
@@ -56,8 +57,8 @@ function buildPlot(id){
         type: "bar",
         orientation: 'h'
     }];
-
-    var data2 = [{
+    //data for bubble chart
+    var bubbleData = [{
         x: otuIDs,
         y: sampleValues,
         mode: 'markers',
@@ -67,23 +68,21 @@ function buildPlot(id){
         },
         text:otuLabels
     }];
-
-    //var data1 = [trace1];
-
-    var layout1 = {
+    //layout for bar chart
+    var barLayout = {
         title: {
             text:"Top 10 Bacteria Cultures Found"
         }
     };
-
-    var layout2 ={
+    //layout for bubble chart
+    var bubbleLayout ={
         title:{
             text: "Bacteria Cultures per Sample"
         }
     }
-
-    Plotly.newPlot('bar', data1, layout1);
-    Plotly.newPlot('bubble', data2, layout2);
+    //Plots for both bubble and bar charts
+    Plotly.newPlot('bar', barData, barLayout);
+    Plotly.newPlot('bubble', bubbleData, bubbleLayout);
 
       });
       
@@ -92,12 +91,14 @@ function buildPlot(id){
 
 function buildGage(id){
     d3.json("StarterCode/samples.json").then(function(data){
-      var metaData = Object.values(data.metadata);
+    //obtained values from json data file for samples and filtered by 
+    //user inputted sample id
+    var metaData = Object.values(data.metadata);
     var result = metaData.filter(row => row.id == id);
     var resultData = result[0];
+    //set variable for the wash frequency data
     var wfreq = resultData.wfreq 
-    console.log(wfreq);
-    
+    //set up gauge data
     var data = [
         {
           domain: { x: [0, 1], y: [0, 1] },
@@ -128,24 +129,27 @@ function buildGage(id){
           }
         }
       ];
-      
+      //set up layout
       var layout = { width: 600, height: 450, margin: { t: 0, b: 0 } };
+      //plot using the data and layout
       Plotly.newPlot('gauge', data, layout);
     });
 }
 
 
-
+//set up function to build the demographics for each sample
 function buildDemographics(id){
     d3.json("StarterCode/samples.json").then(function(data) {
-        //console.log(data);
+    //obtained values from json data file for samples and filtered by 
+    //user inputted sample id    
     var metaData = Object.values(data.metadata);
     var result = metaData.filter(row => row.id == id);
     var resultData = result[0];
-        //console.log(metaData);
-    
+        
+    //selected the id name to find were to add the demographic info
     var info = d3.select("#sample-metadata");
     info.html("");
+    //used key and value to append the above variable with the demographic info
     Object.entries(resultData).forEach(([key, value]) => {
         info.append('h6').text(`${key} : ${value}`);
         });
@@ -154,14 +158,10 @@ function buildDemographics(id){
 
 
 
-
+//used function that was called in the index.html to select a new sample
+//from the json data file using a user input
 function optionChanged(newSample){
-   // d3.json("./samples.json").then(function(data) {
-    // /** */    var sample = d3.select("#selDataset").property("value");
-    // console.log(sample)
-
-    // var updateMeta = Object.entries(data.metadata[0]).filter(item => item.id === sample);
-    // console.log(updateMeta)
+   //call all of the previous functions with the user input
     buildDemographics(newSample);
     buildPlot(newSample);
     buildGage(newSample);

@@ -1,6 +1,6 @@
 # plotly-challenge
 
-An interactive dashboard can be found at the link below
+An interactive dashboard can be found at the link here: 
 https://dkrug82.github.io/plotly-challenge/
 
 In this challenge I used d3 and plotly to explore and visualize the Belly Button Biodiversity dataset, which catalogs the microbes that colonize human navels.
